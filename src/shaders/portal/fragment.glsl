@@ -74,6 +74,8 @@ float cnoise(vec3 P){
 }
 
 uniform float uTime;
+uniform vec3 uColorStart;
+uniform vec3 uColorEnd;
 varying vec2 vUv;
 
 void main()
@@ -93,8 +95,11 @@ void main()
 
     // make shader more sharp
     strength += step(-0.2, strength) * 0.5;
+
+    // clamp the value
+    strength = clamp(strength, 0.0, 1.0);
      
-    vec3 finalMix = vec3(strength);
+    vec3 finalMix = mix(uColorStart, uColorEnd, strength);
 
     gl_FragColor = vec4(finalMix, 1.0);
 

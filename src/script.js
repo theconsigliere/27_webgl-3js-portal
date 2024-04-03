@@ -15,7 +15,9 @@ import firefliesFragmentShader from "./shaders/fireflies/fragment.glsl"
  */
 // Debug
 const debugObject = {
-  clearColor: "#2a1d1d",
+  background: "#2a1d1d",
+  colorStart: "#e675a6",
+  colorEnd: "#2a1d1d",
 }
 const gui = new GUI({
   width: 400,
@@ -56,6 +58,8 @@ const portalLightMaterial = new THREE.ShaderMaterial({
   fragmentShader: portalFragmentShader,
   uniforms: {
     uTime: { value: 0 },
+    uColorStart: { value: new THREE.Color(0xe675a6) },
+    uColorEnd: { value: new THREE.Color(0x2a1d1d) },
   },
 })
 
@@ -191,11 +195,19 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 renderer.setClearColor(debugObject.clearColor)
 
-gui.addColor(debugObject, "clearColor").onChange(() => {
-  renderer.setClearColor(debugObject.clearColor)
+gui.addColor(debugObject, "background").onChange(() => {
+  renderer.setClearColor(debugObject.background)
 })
 
 gui.add(firefliesMaterial.uniforms.uSize, "value").min(0).max(500).step(1)
+
+gui.addColor(debugObject, "colorStart").onChange(() => {
+  portalLightMaterial.uniforms.uColorStart.value.set(debugObject.colorStart)
+})
+
+gui.addColor(debugObject, "colorEnd").onChange(() => {
+  portalLightMaterial.uniforms.uColorEnd.value.set(debugObject.colorEnd)
+})
 
 /**
  * Animate
